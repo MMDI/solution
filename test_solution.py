@@ -12,7 +12,7 @@ import solution
 _RedirectContext = collections.namedtuple('RedirectContext', 'add_server session')
 
 @pytest.fixture
-async def aiohttp_redirector():
+async def aiohttp_redirector() -> None:
     """ Redirect requests to local test server """
     resolver = FakeResolver()
     connector = aiohttp.TCPConnector(resolver=resolver, use_dns_cache=False)
@@ -26,7 +26,7 @@ class CaseControlledTestServer(aiohttp.test_utils.RawTestServer):
         self._requests = asyncio.Queue()
         self._responses = {}                # {id(request): Future}
 
-    async def close(self):
+    async def close(self) -> None:
         """ Cancel all pending requests before closing """
         for future in self._responses.values():
             future.cancel()
@@ -53,7 +53,7 @@ class CaseControlledTestServer(aiohttp.test_utils.RawTestServer):
 
 class FakeResolver:
     """ Resolves tested addresses to local test servers """
-    def __init__(self):
+    def __init__(self) -> None:
         self._servers = {}
 
     def add(self, host, port, target_port):
